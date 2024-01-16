@@ -1,3 +1,5 @@
+import { Button } from "bootstrap";
+import Weather from "./Weather";
 import "./App.css";
 
 export default function App() {
@@ -5,7 +7,9 @@ export default function App() {
     <div className="App">
       <div className="container">
         <h1>Weather App</h1>
+        <Weather />
         <footer>
+          <Button>Title</Button>
           <button className="btn btn-primary">Hello</button>
           This project was coded by
           <a href="https://www.instagram.com/vediashkyna/" target="blank">
