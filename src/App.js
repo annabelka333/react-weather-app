@@ -6,9 +6,7 @@ export default function App() {
       <div className="container">
         <h1>Weather App</h1>
         <footer>
-          <button btn btn-primary>
-            Hello
-          </button>
+          <button className="btn btn-primary">Hello</button>
           This project was coded by
           <a href="https://www.instagram.com/vediashkyna/" target="blank">
             {" "}
