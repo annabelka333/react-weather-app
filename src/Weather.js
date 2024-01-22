@@ -1,15 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Weather.css";
 import Spinner from "react-bootstrap/Spinner";
+import { getWeather } from "./api/weather";
 
 export default function Weather(props) {
-  const [weatherData, setWeatherData] = useState({ ready: false });
-  const [city, setCity] = useState("");
+  const [weatherData, setWeatherData] = useState({
+    ready: false,
+    isLoading: false,
+  });
 
-  function handleResponse(response) {
+  useEffect(() => {
+    async function getData() {
+      const data = await getWeather(props.defaultCity);
+      handleResponse(data);
+      setWeatherData({ ...weatherData, ...data.data });
+    }
+    getData();
+  }, []);
+
+  const [city, setCity] = useState("");
+  const handleResponse = (response) => {
     console.log(response.data);
     setWeatherData({
+      isLoading: false,
       ready: true,
       temperature: response.data.main.temp,
       wind: response.data.wind.speed,
@@ -19,15 +33,21 @@ export default function Weather(props) {
       iconUrl: "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
       date: "Saturday 23:00",
     });
-  }
-  function handleSubmit(event) {
-    event.preventDefault();
-    const apiKey = "a34ea9a8b63af4e06cec6a6a23f5469e";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(handleResponse);
-  }
+  };
 
-  if (!weatherData.ready) {
+  const handleSubmit = async (event) => {
+    // event.preventDefault();
+    setWeatherData({ ...weatherData, isLoading: true });
+    // const apiKey = "a34ea9a8b63af4e06cec6a6a23f5469e";
+    // const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
+    // axios.get(apiUrl).then(handleResponse);
+    // setTimeout(() => {}, 3000);
+
+    const data = await getWeather(props.defaultCity);
+    handleResponse(data);
+  };
+  // handleSubmit();
+  if (weatherData.isLoading) {
     return (
       <div className="Weather">
         <Spinner animation="border" role="status">
@@ -36,6 +56,7 @@ export default function Weather(props) {
       </div>
     );
   }
+  console.log("Hello2");
   return (
     <div className="Weather">
       <form onSubmit={handleSubmit}>
@@ -58,7 +79,7 @@ export default function Weather(props) {
         </div>
       </form>
       <ul>
-        <h1>{weatherData.city}</h1>
+        <h1>{weatherData.city || props.defaultCity}</h1>
         <li>{weatherData.date}</li>
         <li className="text-capitalize">{weatherData.description}</li>
       </ul>
