@@ -14,9 +14,9 @@ export default function Weather(props) {
     async function getData() {
       const data = await getWeather(props.defaultCity);
       handleResponse(data);
-      //  setWeatherData({ ...weatherData, ...data.data });
+    //  setWeatherData({ ...weatherData, ...data.data });
     }
-    //  getData();
+  //  getData();
   }, []);
 
   const [city, setCity] = useState("");
@@ -56,7 +56,7 @@ export default function Weather(props) {
       </div>
     );
   }
-  console.log("Hello2");
+  
   return (
     <div className="Weather">
       <form onSubmit={handleSubmit}>
@@ -67,8 +67,6 @@ export default function Weather(props) {
               placeholder="Enter a city..."
               className="form-control"
               autoFocus="on"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
             />
           </div>
           <div className="col-3">
